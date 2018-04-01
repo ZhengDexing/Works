@@ -5,17 +5,17 @@
 
 <mapper namespace="com.works.mapper.UserMapper">
     <!-- 注册用户 -->
-    <insert id="addUserRegister" parameterType="User">
-          INSERT  INTO w_user (id,user_email,password,role) VALUES (#{id},#{user_email},#{password},#{role})
+    <insert id="addUserRegister" parameterType="W_User">
+          INSERT  INTO w_user (user_id,email,password,nickname,role) VALUES (#{user_id},#{email},#{password},#{nickname},#{role})
     </insert>
 
     <!-- 查询用户名密码是否正确 -->
-    <select id="findUserLogin" parameterType="Map" resultType="User">
-        SELECT * FROM w_user WHERE user_email = #{user_email} AND password = #{password}
+    <select id="findUserLogin" parameterType="Map" resultType="W_User">
+        SELECT * FROM w_user WHERE email = #{email} AND password = #{password}
     </select>
 
     <!-- 判断这个用户是否已经注册 -->
-    <select id="findUser2email" parameterType="String" resultType="User">
-        SELECT * FROM w_user WHERE user_email = #{user_email}
+    <select id="findUser2email" parameterType="String" resultType="W_User">
+        SELECT * FROM w_user WHERE email = #{email}
     </select>
 </mapper>

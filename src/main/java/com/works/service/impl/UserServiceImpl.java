@@ -1,7 +1,7 @@
 package com.works.service.impl;
 
 import com.works.common.util.CookieUtil;
-import com.works.entity.User;
+import com.works.entity.W_User;
 import com.works.mapper.UserMapper;
 import com.works.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +20,11 @@ public class UserServiceImpl implements UserService {
     /**
      * 用户注册
      */
-    public Map<String, Object> addUserRegister(User user) {
+    public Map<String, Object> addUserRegister(W_User user) {
 
         Map<String, Object> result = new HashMap<String, Object>();
 
-        User isRegister = userMapper.findUser2email(user.getUser_email());//判断这个邮箱是否已经注册
+        W_User isRegister = userMapper.findUser2email(user.getEmail());//判断这个邮箱是否已经注册
 
         if (null != isRegister) {
             result.put("code", -100);
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
         find.put("user_email", user_email);
         find.put("password", password);
-        User user = userMapper.findUserLogin(find);
+        W_User user = userMapper.findUserLogin(find);
 
         if (user == null) {
             result.put("code", -100);
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
             return result;
         }
 
-        CookieUtil.addCookie(res,"",user.getId());
+        CookieUtil.addCookie(res,"",user.getUser_id());
 
         result.put("code", 200);
         result.put("errMsg", "success");

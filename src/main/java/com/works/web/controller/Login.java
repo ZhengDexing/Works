@@ -1,8 +1,7 @@
 package com.works.web.controller;
 
-import com.works.entity.User;
+import com.works.entity.W_User;
 import com.works.service.UserService;
-import com.works.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -27,7 +25,7 @@ public class Login {
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> register(User user) {
+    public Map<String, Object> register(W_User user) {
         Map<String, Object> result = userService.addUserRegister(user);
         return result;
     }
