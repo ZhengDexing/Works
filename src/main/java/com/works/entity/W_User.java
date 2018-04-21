@@ -1,12 +1,15 @@
 package com.works.entity;
 
+/**
+ * 用户基本
+ */
 public class W_User {
-    private String user_id;
-    private String email;
-    private String password;
-    private String nickname;
-    private String portrait;
-    private int role;
+    private String user_id;     //用户id
+    private String email;       //邮箱
+    private String password;    //密码
+    private String nickname;    //昵称
+    private String portrait;    //头像
+    private int role;           //角色
 
     public String getUser_id() {
         return user_id;

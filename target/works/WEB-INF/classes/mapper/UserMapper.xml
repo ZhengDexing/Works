@@ -4,18 +4,80 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.works.mapper.UserMapper">
+
+    <insert id="addDelivery" parameterType="Map">
+        insert INTO delivery (delivery_id,post_id,user_id,status)
+          values (#{delivery_id},#{post_id},#{user_id},0)
+    </insert>
     <!-- 注册用户 -->
-    <insert id="addUserRegister" parameterType="User">
-          INSERT  INTO w_user (id,user_email,password,role) VALUES (#{id},#{user_email},#{password},#{role})
+    <insert id="addUserRegister" parameterType="UserVO">
+          INSERT INTO w_user (user_id,email,password,nickname,role)
+            VALUES (#{user_id},#{email},#{password},#{nickname},#{role})
+    </insert>
+    <!-- 新增用户信息 -->
+    <insert id="addUserMessage" parameterType="UserVO">
+        INSERT INTO user_message (user_id,realname,age,idcard,phone,address,school,graduation,trade_id,city_id)
+          VALUES (#{user_id},#{realname},#{age},#{idcard},#{phone},#{address},#{school},#{graduation},#{trade_id},#{city_id})
     </insert>
 
+    <update id="updateUserMessage" parameterType="UserMessage">
+        UPDATE user_message
+        <set>
+            <if test="realname != null and realname !='' ">
+                realname=#{realname},
+            </if>
+            <if test="age != null and age !='' ">
+                age=#{age},
+            </if>
+            <if test="idcard != null and idcard !='' ">
+                idcard=#{idcard},
+            </if>
+            <if test="phone != null and phone !='' ">
+                phone=#{phone},
+            </if>
+            <if test="address != null and address !='' ">
+                address=#{address},
+            </if>
+            <if test="school != null and school !='' ">
+                school=#{school},
+            </if>
+            <if test="graduation != null and graduation !='' ">
+                graduation=#{graduation},
+            </if>
+            <if test="trade_id != null and trade_id !='' ">
+                trade_id=#{trade_id},
+            </if>
+            <if test="city_id != null and city_id !='' ">
+                city_id=#{city_id},
+            </if>
+        </set>
+        where user_id=#{user_id}
+    </update>
+
     <!-- 查询用户名密码是否正确 -->
-    <select id="findUserLogin" parameterType="Map" resultType="User">
-        SELECT * FROM w_user WHERE user_email = #{user_email} AND password = #{password}
+    <select id="findUserLogin" parameterType="Map" resultType="W_User">
+        SELECT * FROM w_user WHERE email = #{email} AND password = #{password}
     </select>
 
     <!-- 判断这个用户是否已经注册 -->
-    <select id="findUser2email" parameterType="String" resultType="User">
-        SELECT * FROM w_user WHERE user_email = #{user_email}
+    <select id="findUser2email" parameterType="String" resultType="W_User">
+        SELECT * FROM w_user WHERE email = #{email}
     </select>
+    <!-- 查询用户信息 -->
+    <select id="findUserMessage" parameterType="String" resultType="UserVO">
+        SELECT * FROM w_user as u,user_message as um  WHERE u.user_id = um.user_id and user_id = #{user_id}
+    </select>
+
+    <!-- 查询用户和信息 -->
+    <select id="findUserAndMessage" parameterType="String" resultType="UserVO">
+        SELECT
+            *
+        FROM
+            w_user as wu,
+            user_message AS um
+        WHERE
+            wu.user_id = um.user_id
+            AND wu.user_id = #{user_id}
+    </select>
+
 </mapper>

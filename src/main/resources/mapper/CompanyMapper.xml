@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.works.mapper.CompanyMapper">
+    <!-- 创建企业信息 -->
+    <insert id="addCompany" parameterType="UserVO">
+       INSERT INTO company (company_id,company_name,address,phone,corporation,status,num,city_id,user_id)
+          VALUES (#{company_id},#{company_name},#{address},#{phone},#{corporation},#{status},#{num},#{city_id},#{user_id})
+   </insert>
+
+    <!-- 添加岗位 -->
+    <insert id="addPost" parameterType="Post">
+        INSERT INTO post (post_id,company_id,num,message,trade_id,post_name)
+          VALUES (#{post_id},#{company_id},#{num},#{message},#{trade_id},#{post_name})
+    </insert>
+
+    <!-- 修改岗位信息 -->
+    <update id="updatePost" parameterType="String">
+        UPDATE post
+         <set>
+             <if test="salary != null and salary !='' ">
+                 salary = #{salary},
+             </if>
+             <if test="post_name != null and post_name !='' ">
+                 post_name = #{post_name},
+             </if>
+             <if test="message != null and message !='' ">
+                 message = #{message},
+             </if>
+         </set>
+         WHERE post_id = #{post_id}
+
+    </update>
+
+    <!-- 修改企业信息 -->
+    <update id="updateCompany" parameterType="Company">
+        UPDATE company
+        <set>
+            <if test="company_name != null and company_name !='' ">
+                company_name = #{company_name},
+            </if>
+            <if test="address != null and address !='' ">
+                address = #{address},
+            </if>
+            <if test="phone != null and phone !='' ">
+                phone = #{phone},
+            </if>
+            <if test="corporation != null and corporation !='' ">
+                corporation = #{corporation},
+            </if>
+            <if test="status != null and status !='' ">
+                status = #{status},
+            </if>
+        </set>
+        WHERE company_id = #{company_id}
+    </update>
+
+    <!--查询当前企业的岗位-->
+    <select id="findPost" parameterType="String" resultType="Post">
+        SELECT * from post WHERE company_id = #{company_id}
+    </select>
+
+    <!-- 查询企业信息 -->
+    <select id="findOneCompany" parameterType="String" resultType="Company">
+        select * from company where user_id = #{user_id}
+    </select>
+
+    <!-- 查询应聘者 -->
+    <select id="findDelivery" parameterType="String" resultType="UserDeliveryVO">
+        SELECT
+            *
+        FROM
+            delivery AS d,
+            user_message AS um,
+            post AS P
+        WHERE
+            d.user_id = um.user_id
+            AND P.post_id = d.post_id
+            AND P.company_id =#{company_id}
+    </select>
+
+    <!-- 查询所有岗位 -->
+    <select id="findAllPost" resultType="PostVO">
+        select * from post as p ,company as c where p.company_id = c.company_id
+    </select>
+
+    <!-- 根据岗位id查询岗位信息 -->
+    <select id="findOnePost" parameterType="String" resultType="PostVo">
+        select * from post as p ,company as c where p.company_id = c.company_id and p.post_id = #{post_id}
+    </select>
+
+    <!-- 查询用户投递的岗位 -->
+    <select id="getDelivery2User" parameterType="String" resultType="DeliveryVO">
+        SELECT c.company_name,p.post_name,d.status from delivery as d,post as p, company as c
+            WHERE d.post_id = p.post_id AND c.company_id = p.company_id and user_id = #{user_id}
+    </select>
+
+    <!-- 查询企业的所有岗位 -->
+    <select id="findPostByCompany" parameterType="String" resultType="Post">
+        select * from post where compamy_id = #{compamy_id}
+    </select>
+</mapper>
